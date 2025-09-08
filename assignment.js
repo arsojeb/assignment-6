@@ -4,48 +4,75 @@ const cartItems = document.getElementById("cartItems");
 const cartTotal = document.getElementById("cartTotal");
 
 let cart = [];
+let allPlants = []; // store all plants globally
 
-// Load categories
-async function loadCategories() {
-  const res = await fetch("https://openapi.programming-hero.com/api/categories");
-  const data = await res.json();
+// Load all plants
+function loadPlants() {
+  fetch("https://openapi.programming-hero.com/api/plants")
+    .then(res => res.json())
+    .then(data => {
+      allPlants = data.plants || [];
+      displayPlants(allPlants);
+      loadCategories(allPlants);
+    });
+}
 
-  data.categories.forEach(cat => {
+// Load categories dynamically from plant data
+function loadCategories(plants) {
+  categoryList.innerHTML = "";
+
+  // Add "All" category button
+  const liAll = document.createElement("li");
+  liAll.innerHTML = `
+    <button onclick="displayPlants(allPlants)"
+      class="w-full text-left px-2 py-1 rounded hover:bg-green-300 font-semibold">
+      All
+    </button>
+  `;
+  categoryList.appendChild(liAll);
+
+  // Extract unique categories
+  const categories = [...new Set(plants.map(p => p.category))];
+
+  categories.forEach(category => {
     const li = document.createElement("li");
     li.innerHTML = `
-      <button onclick="loadPlantsByCategory(${cat.id})"
-        class="w-full text-left px-2 py-1 rounded hover:bg-green-300">${cat.name}</button>
+      <button onclick="filterByCategory('${category}')"
+        class="w-full text-left px-2 py-1 rounded hover:bg-green-300">
+        ${category}
+      </button>
     `;
     categoryList.appendChild(li);
   });
 }
 
-// Load all plants
-async function loadPlants() {
-  const res = await fetch("https://openapi.programming-hero.com/api/plants");
-  const data = await res.json();
-  displayPlants(data.plants);
-}
-
-// Load plants by category
-async function loadPlantsByCategory(id) {
-  const res = await fetch(`https://openapi.programming-hero.com/api/category/${id}`);
-  const data = await res.json();
-  displayPlants(data.plants);
+// Filter plants by category
+function filterByCategory(category) {
+  const filteredPlants = allPlants.filter(p => p.category === category);
+  displayPlants(filteredPlants);
 }
 
 // Display plants
 function displayPlants(plants) {
   plantsContainer.innerHTML = "";
+  if (!plants.length) {
+    plantsContainer.innerHTML = `<p class="text-center text-gray-500">No plants found</p>`;
+    return;
+  }
+
   plants.forEach(plant => {
     const div = document.createElement("div");
     div.className = "bg-white shadow rounded-lg p-3";
+
     div.innerHTML = `
-      <img src="${plant.image}" alt="${plant.name}" class="w-full h-32 object-cover rounded">
-      <h3 class="font-bold mt-2">${plant.name}</h3>
+      <img src="${plant.image}" alt="${plant.name}" class="w-full h-[187px] object-cover rounded">
+      <h3 onclick="showPlantDetail('${plant.id}')"
+          class="font-bold mt-2 cursor-pointer text-green-700 hover:underline">
+          ${plant.name}
+      </h3>
       <p class="text-sm text-gray-600">${plant.description.slice(0,60)}...</p>
       <span class="inline-block mt-1 text-xs bg-green-200 px-2 py-1 rounded">
-        ${plant.category ? plant.category.name : 'No Category'}
+        ${plant.category}
       </span>
       <div class="flex justify-between items-center mt-2">
         <span class="font-bold">৳${plant.price}</span>
@@ -60,15 +87,12 @@ function displayPlants(plants) {
 // Add to cart
 function addToCart(id, name, price) {
   const existing = cart.find(item => item.id === id);
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ id, name, price, qty: 1 });
-  }
+  if (existing) existing.qty++;
+  else cart.push({ id, name, price, qty: 1 });
   updateCart();
 }
 
-//Update cart
+// Update cart
 function updateCart() {
   cartItems.innerHTML = "";
   let total = 0;
@@ -85,30 +109,27 @@ function updateCart() {
   cartTotal.innerText = "৳" + total;
 }
 
-//Remove from cart
+// Remove from cart
 function removeFromCart(id) {
   cart = cart.filter(item => item.id !== id);
   updateCart();
 }
 
-// Initial Load
-loadCategories();
-loadPlants();
-
-// Show plant details
-async function showPlantDetail(id) {
-  const res = await fetch(`https://openapi.programming-hero.com/api/plant/${id}`);
-  const data = await res.json();
-  const plant = data;
+// Show plant details in modal
+function showPlantDetail(id) {
+  const plant = allPlants.find(p => p.id == id);
+  if (!plant) return;
 
   const modalContent = document.getElementById("modalContent");
   modalContent.innerHTML = `
     <img src="${plant.image}" alt="${plant.name}" class="w-full h-40 object-cover rounded-lg">
     <h2 class="font-bold text-xl">${plant.name}</h2>
     <p class="text-gray-600">${plant.description}</p>
-    <p class="font-semibold">Category: <span class="badge badge-success">${plant.category ? plant.category.name : 'No Category'}</span></p>
-    <p class="font-bold text-lg">৳${plant.price}</p>
-    <button onclick="addToCart(${plant.id}, '${plant.name}', ${plant.price})" 
+    <p class="font-semibold mt-2">Category: 
+      <span class="badge badge-success">${plant.category}</span>
+    </p>
+    <p class="font-bold text-lg mt-2">৳${plant.price}</p>
+    <button onclick="addToCart('${plant.id}', '${plant.name}', ${plant.price})" 
       class="w-full bg-green-600 text-white py-2 rounded-lg mt-3 hover:bg-green-700">
       Add to Cart
     </button>
@@ -116,3 +137,6 @@ async function showPlantDetail(id) {
 
   document.getElementById("plantDetailModal").checked = true;
 }
+
+// Initial Load
+loadPlants();
