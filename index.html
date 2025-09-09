@@ -153,17 +153,21 @@
 
 <!-- Donation Section -->
 <section class="flex flex-col justify-center items-center bg-[#166534] py-12 px-4">
-  <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 text-white">Plant a Tree Today</h1>
+  <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 text-white">
+    Plant a Tree Today
+  </h1>
 
-  <div class="flex flex-col w-full max-w-lg gap-4 rounded-lg bg-[#15803D] p-6">
-    <input type="text" placeholder="Enter your name" class="rounded-lg w-full h-12 input input-bordered" required />
-    <input type="email" placeholder="Enter your email" class="rounded-lg w-full h-12 input input-bordered" required />
-    <input type="number" min="1" placeholder="How many trees?" class="rounded-lg w-full h-12 input input-bordered" required />
+  <form id="plantForm" class="flex flex-col w-full max-w-lg gap-4 rounded-lg bg-[#15803D] p-6">
+    <input type="text" name="name" placeholder="Enter your name" class="rounded-lg w-full h-12 input input-bordered" required />
+    <input type="email" name="email" placeholder="Enter your email" class="rounded-lg w-full h-12 input input-bordered" required />
+    <input type="number" name="treeCount" min="1" placeholder="How many trees?" class="rounded-lg w-full h-12 input input-bordered" required />
+
     <button type="submit" class="w-full h-12 bg-[#FACC15] text-[#15803D] rounded-3xl shadow hover:bg-yellow-500 transition duration-300 font-bold">
       Donate Now
     </button>
-  </div>
+  </form>
 </section>
+
 
 <!-- Footer -->
 <footer class="">

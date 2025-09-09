@@ -4,7 +4,7 @@ const cartItems = document.getElementById("cartItems");
 const cartTotal = document.getElementById("cartTotal");
 
 let cart = [];
-let allPlants = []; // store all plants globally
+let allPlants = [];
 
 // Load all plants
 function loadPlants() {
@@ -137,6 +137,20 @@ function showPlantDetail(id) {
 
   document.getElementById("plantDetailModal").checked = true;
 }
+
+const plantForm = document.getElementById('plantForm');
+
+plantForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(plantForm);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const treeCount = formData.get('treeCount');
+    
+    alert(`Thank you, ${name}! You've committed to planting ${treeCount} trees. We'll contact you at ${email} with further details.`);
+    plantForm.reset();
+});
+
 
 // Initial Load
 loadPlants();
