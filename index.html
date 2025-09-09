@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GREEN EARTH</title>
   <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- DaisyUI Plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.js"></script>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- DaisyUI CSS -->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" />
 </head>
 <body class="max-w-[1920px] mx-auto">
 
@@ -168,13 +167,24 @@
   </form>
 </section>
 
-
 <!-- Footer -->
 <footer class="">
   <h1 class="flex justify-center items-center text-white bg-green-950 h-[72px] text-center">© 2025 Green Earth. All Rights Reserved.</h1>
 </footer>
 
-<!-- Script -->
+<!-- Plant Detail Modal -->
+<input type="checkbox" id="plantDetailModal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box max-w-lg">
+    <div id="modalContent"></div>
+    <div class="modal-action">
+      <label for="plantDetailModal" class="btn">Close</label>
+    </div>
+  </div>
+</div>
+
+
+<!-- Scripts -->
 <script src="assignment.js"></script>
 <script>
   // Mobile menu toggle

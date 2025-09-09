@@ -122,7 +122,7 @@ function showPlantDetail(id) {
 
   const modalContent = document.getElementById("modalContent");
   modalContent.innerHTML = `
-    <img src="${plant.image}" alt="${plant.name}" class="w-full h-40 object-cover rounded-lg">
+    <img src="${plant.image}" alt="${plant.name}" class="w-full h-80 object-cover rounded-lg">
     <h2 class="font-bold text-xl">${plant.name}</h2>
     <p class="text-gray-600">${plant.description}</p>
     <p class="font-semibold mt-2">Category: 
@@ -141,14 +141,18 @@ function showPlantDetail(id) {
 const plantForm = document.getElementById('plantForm');
 
 plantForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(plantForm);
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const treeCount = formData.get('treeCount');
-    
-    alert(`Thank you, ${name}! You've committed to planting ${treeCount} trees. We'll contact you at ${email} with further details.`);
-    plantForm.reset();
+  e.preventDefault();
+  const formData = new FormData(plantForm);
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const treeCount = formData.get('treeCount');
+
+  const messageBox = document.createElement("div");
+  messageBox.className = "mt-4 p-3 rounded bg-green-200 text-green-800 font-semibold";
+  messageBox.innerText = `Thank you, ${name}! You've committed to planting ${treeCount} trees. We'll contact you at ${email}.`;
+
+  plantForm.parentNode.appendChild(messageBox);
+  plantForm.reset();
 });
 
 
